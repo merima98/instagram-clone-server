@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
-const { PORT, MONGODB_URI } = process.env;
+const { PORT } = process.env;
 
 const app = express();
 app.use(
