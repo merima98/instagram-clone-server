@@ -9,9 +9,8 @@ async function findAll(values) {
   return users;
 }
 
-async function fingByEmail(email) {
+async function findByEmail(email) {
   const user = await User.findOne({ email });
-  // const user = await User.findOne({ where: { email } });
   return user;
 }
 
@@ -23,6 +22,6 @@ async function findOne(options) {
 export default {
   create,
   findAll,
-  fingByEmail,
+  findByEmail,
   findOne,
 };
