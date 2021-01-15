@@ -1,27 +1,18 @@
-import User from "../models/userModel.js";
+import pkg from "@prisma/client";
+const { PrismaClient } = pkg;
+const prisma = new PrismaClient();
 
 async function create(values) {
-  const user = await User.create(values);
-  return user;
-}
-async function findAll(values) {
-  const users = await User.find(values);
-  return users;
-}
-
-async function findByEmail(email) {
-  const user = await User.findOne({ email });
+  const user = await prisma.user.create(values);
   return user;
 }
 
 async function findOne(options) {
-  const item = await User.findOne(options);
+  const item = await prisma.user.findFirst(options);
   return item;
 }
 
 export default {
   create,
-  findAll,
-  findByEmail,
   findOne,
 };

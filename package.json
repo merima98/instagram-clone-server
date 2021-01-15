@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@prisma/client": "^2.14.0",
     "argon2": "^0.27.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -11,7 +12,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
-  "devDependencies": {},
+  "devDependencies": {
+    "@prisma/cli": "^2.14.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/index.js"
