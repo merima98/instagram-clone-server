@@ -3,9 +3,7 @@ import utils from "../utils/index.js";
 
 async function signup(req, res) {
   try {
-    const existingUser = await usersDAL.findOne({
-      where: { email: req.body.email },
-    });
+    const existingUser = await usersDAL.findOne({ email: req.body.email });
     if (existingUser !== null) {
       return res.status(400).send({ exception: "EmailAllreadyInUseException" });
     }
@@ -37,6 +35,34 @@ async function signup(req, res) {
   } catch (err) {}
 }
 
+async function signin(req, res) {
+  const user = await usersDAL.findOne({ email: req.body.email });
+  if (user === null) {
+    return res.status(400).send({ exception: "UserNotFound" });
+  }
+
+  const verified = await utils.password.verify(
+    user.password,
+    req.body.password
+  );
+
+  if (verified) {
+    const payload = { id: user._id };
+    const token = utils.jwt.sign(payload);
+    const response = {
+      user: {
+        id: user._id,
+        email: user.email,
+        username: user.username,
+      },
+      token,
+    };
+    return res.status(200).send(response);
+  }
+  return res.status(401).send({ exception: "NotAuthotizedException" });
+}
+
 export default {
   signup,
+  signin,
 };

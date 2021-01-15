@@ -10,7 +10,8 @@ async function findAll(values) {
 }
 
 async function fingByEmail(email) {
-  const user = await User.findOne({ where: { email } });
+  const user = await User.findOne({ email });
+  // const user = await User.findOne({ where: { email } });
   return user;
 }
 
