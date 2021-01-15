@@ -4,7 +4,7 @@ import utils from "../utils/index.js";
 async function signup(req, res) {
   try {
     const existingUser = await usersDAL.findOne({
-      where: { email: req.body.data.email },
+      where: { email: req.body.email },
     });
 
     if (existingUser !== null) {
@@ -12,7 +12,7 @@ async function signup(req, res) {
     }
 
     const existingUsername = await usersDAL.findOne({
-      where: { username: req.body.data.username },
+      where: { username: req.body.username },
     });
     if (existingUsername !== null) {
       return res
@@ -20,9 +20,9 @@ async function signup(req, res) {
         .send({ exception: "UsernameAllreadyInUseException" });
     }
 
-    const hash = await utils.password.hash(req.body.data.password);
+    const hash = await utils.password.hash(req.body.password);
     const user = await usersDAL.create({
-      data: { ...req.body.data, password: hash },
+      data: { ...req.body, password: hash },
     });
 
     const payload = { id: user._id };
@@ -42,14 +42,14 @@ async function signup(req, res) {
 
 async function signin(req, res) {
   const user = await usersDAL.findOne({
-    where: { username: req.body.data.username },
+    where: { username: req.body.username },
   });
   if (user === null) {
     return res.status(400).send({ exception: "UserNotFound" });
   }
   const verified = await utils.password.verify(
     user.password,
-    req.body.data.password
+    req.body.password
   );
 
   if (verified) {
