@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 
 import authRoutes from "./routes/authRoutes.js";
 
@@ -12,6 +13,8 @@ app.use(
     extended: true,
   })
 );
+
+app.use(cors());
 app.use(express.json());
 app.use(authRoutes);
 app.listen(PORT);
