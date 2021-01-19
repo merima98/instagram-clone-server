@@ -16,7 +16,9 @@
     "@prisma/cli": "^2.14.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "prisma generate --watch",
+    "studio": "prisma studio",
+    "migrate": "prisma migrate dev --preview-feature",
     "start": "nodemon src/index.js"
   },
   "repository": {
