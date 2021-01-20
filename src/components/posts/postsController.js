@@ -17,6 +17,17 @@ async function addPost(req, res) {
   } catch (err) {}
 }
 
+async function getPosts(req, res) {
+  try {
+    const posts = await postsDAL.findAll();
+    if (posts === null) {
+      return res.status(400).send({ exception: "PostsNotFound" });
+    }
+    return res.status(200).send(posts);
+  } catch (err) {}
+}
+
 export default {
   addPost,
+  getPosts,
 };
