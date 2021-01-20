@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 
-import authRoutes from "./routes/authRoutes.js";
+import authRoutes from "./components/auth/authRoutes.js";
 
 dotenv.config();
 const { PORT } = process.env;

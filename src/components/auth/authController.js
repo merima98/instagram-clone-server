@@ -1,5 +1,5 @@
-import usersDAL from "../DAL/usersDAL.js";
-import utils from "../utils/index.js";
+import usersDAL from "../users/usersDAL.js";
+import utils from "../../utils/index.js";
 
 async function signup(req, res) {
   try {
