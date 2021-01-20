@@ -82,9 +82,7 @@ async function getUsers(req, res) {
       return res.status(400).send({ exception: "UserNotFound" });
     }
     return res.status(200).send(user);
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 }
 
 export default {
