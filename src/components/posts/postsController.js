@@ -19,7 +19,7 @@ async function addPost(req, res) {
 
 async function getPosts(req, res) {
   try {
-    const posts = await postsDAL.findAll();
+    const posts = await postsDAL.findAll({ include: { user: true } });
     if (posts === null) {
       return res.status(400).send({ exception: "PostsNotFound" });
     }
