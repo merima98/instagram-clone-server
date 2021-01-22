@@ -33,10 +33,9 @@ model Post {
 }
 
 model Likes {
-  id         Int   @id @default(autoincrement())
-  post       Post  @relation(fields: [postId], references: [id])
-  postId     Int
-  User       User? @relation(fields: [userId], references: [id])
-  userId     Int?
-  likesCount Int
+  id     Int  @id @default(autoincrement())
+  post   Post @relation(fields: [postId], references: [id])
+  postId Int
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
 }
