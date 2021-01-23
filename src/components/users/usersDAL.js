@@ -12,13 +12,7 @@ async function findOne(options) {
   return item;
 }
 
-async function findAll(options) {
-  const item = await prisma.user.findMany(options);
-  return item;
-}
-
 export default {
   create,
   findOne,
-  findAll,
 };

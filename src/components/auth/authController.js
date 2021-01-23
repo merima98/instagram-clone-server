@@ -72,25 +72,8 @@ async function signin(req, res) {
   return res.status(401).send({ exception: "NotAuthotizedException" });
 }
 
-async function getUsers(req, res) {
-  try {
-    const user = await usersDAL.findAll({
-      where: {
-        username: {
-          startsWith: req.body.username,
-        },
-      },
-    });
-
-    if (user === null) {
-      return res.status(400).send({ exception: "UserNotFound" });
-    }
-    return res.status(200).send(user);
-  } catch (err) {}
-}
-
 export default {
   signup,
   signin,
-  getUsers,
+  // getUsers,
 };
