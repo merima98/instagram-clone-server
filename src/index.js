@@ -5,6 +5,7 @@ import cors from "cors";
 import authRoutes from "./components/auth/authRoutes.js";
 import postsRoutes from "./components/posts/postsRoutes.js";
 import userRoutes from "./components/users/userRoutes.js";
+import likesRoutes from "./components/likes/likesRoutes.js";
 
 dotenv.config();
 const { PORT } = process.env;
@@ -21,4 +22,5 @@ app.use(express.json());
 app.use(authRoutes);
 app.use(postsRoutes);
 app.use(userRoutes);
+app.use(likesRoutes);
 app.listen(PORT);

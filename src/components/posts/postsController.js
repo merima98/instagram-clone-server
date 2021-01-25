@@ -38,66 +38,7 @@ async function getPosts(req, res) {
   } catch (err) {}
 }
 
-async function likePost(req, res) {
-  try {
-    const postId = req.query.postId;
-    const userId = req.query.userId;
-    const args = {
-      data: {
-        user: {
-          connect: { id: parseInt(userId) },
-        },
-        post: {
-          connect: { id: parseInt(postId) },
-        },
-      },
-    };
-    const post = await postsDAL.likePost(args);
-    const posts = await postsDAL.findAll({
-      include: {
-        user: true,
-        likes: {
-          include: {
-            user: true,
-            post: true,
-          },
-        },
-      },
-    });
-    res.status(201).send(posts);
-  } catch (err) {}
-}
-
-async function dislikePost(req, res) {
-  try {
-    const postId = req.query.postId;
-    const userId = req.query.userId;
-    const post = await postsDAL.getLike({
-      where: { postId: parseInt(postId), userId: parseInt(userId) },
-    });
-    await postsDAL.deleteLike({
-      where: {
-        id: post.id,
-      },
-    });
-    const posts = await postsDAL.findAll({
-      include: {
-        user: true,
-        likes: {
-          include: {
-            user: true,
-            post: true,
-          },
-        },
-      },
-    });
-    res.status(201).send(posts);
-  } catch (err) {}
-}
-
 export default {
   addPost,
   getPosts,
-  likePost,
-  dislikePost,
 };
