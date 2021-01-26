@@ -2,11 +2,10 @@ import usersDAL from "../users/usersDAL.js";
 async function getUser(req, res) {
   try {
     const username = req.query.username;
- 
+
     const user = await usersDAL.findOne({
       where: {
-        username:  username,
-        
+        username: username,
       },
     });
     if (user === null) {
@@ -16,6 +15,6 @@ async function getUser(req, res) {
   } catch (err) {}
 }
 
-export default { 
+export default {
   getUser,
 };

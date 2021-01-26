@@ -17,6 +17,7 @@ model User {
   firstName String
   lastName  String
   password  String
+  image     String?
   posts     Post[]
   likes     Likes[]
 }
