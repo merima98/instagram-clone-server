@@ -14,7 +14,20 @@ async function addPost(req, res) {
       },
     };
     const post = await postsDAL.create(args);
-    res.status(201).send(post);
+
+    const createdPost = await postsDAL.findOne({
+      where: { id: post.id },
+      include: {
+        user: true,
+        likes: {
+          include: {
+            user: true,
+            post: true,
+          },
+        },
+      },
+    });
+    res.status(201).send(createdPost);
   } catch (err) {}
 }
 
