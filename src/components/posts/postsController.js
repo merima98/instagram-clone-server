@@ -21,6 +21,9 @@ async function addPost(req, res) {
 async function getPosts(req, res) {
   try {
     const posts = await postsDAL.findAll({
+      orderBy: {
+        createdAt: "desc",
+      },
       include: {
         user: true,
         likes: {
@@ -48,6 +51,9 @@ async function findPostsByUser(req, res) {
     });
 
     const posts = await postsDAL.findAll({
+      orderBy: {
+        createdAt: "desc",
+      },
       where: { user: user },
     });
 
