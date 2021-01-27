@@ -35,8 +35,8 @@ async function getPosts(req, res) {
   try {
     const posts = await postsDAL.findAll({
       orderBy: {
-        createdAt: "desc",
-      },
+        createdAt: "desc", 
+      }, 
       include: {
         user: true,
         likes: {

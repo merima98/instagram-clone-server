@@ -12,7 +12,13 @@ async function findOne(options) {
   return item;
 }
 
+async function updateUser(options) {
+  const item = await prisma.user.update(options);
+  return item;
+}
+
 export default {
   create,
   findOne,
+  updateUser,
 };

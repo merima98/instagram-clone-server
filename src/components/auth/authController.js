@@ -74,6 +74,5 @@ async function signin(req, res) {
 
 export default {
   signup,
-  signin,
-  // getUsers,
+  signin, 
 };
