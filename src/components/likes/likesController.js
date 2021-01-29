@@ -1,9 +1,29 @@
 import likesDAL from "./likesDAL.js";
+import postsDAL from "../posts/postsDAL.js";
+import utils from "../../utils/index.js";
+
+function checkForAuth(headers) {
+  try {
+    const token = headers.authorization;
+
+    if (!token) {
+      return null;
+    }
+
+    const decoded = utils.jwt.verify(token);
+    const userId = decoded.id;
+
+    return userId;
+  } catch {
+    return null;
+  }
+}
 
 async function likePost(req, res) {
   try {
+    const userId = checkForAuth(req.headers);
+
     const postId = req.query.postId;
-    const userId = req.query.userId;
     const args = {
       data: {
         user: {
@@ -14,8 +34,12 @@ async function likePost(req, res) {
         },
       },
     };
-    const post = await likesDAL.likePost(args);
-    const posts = await likesDAL.findAll({
+    await likesDAL.likePost(args);
+
+    const posts = await postsDAL.findAll({
+      orderBy: {
+        createdAt: "desc",
+      },
       include: {
         user: true,
         likes: {
@@ -26,23 +50,29 @@ async function likePost(req, res) {
         },
       },
     });
+
     res.status(201).send(posts);
   } catch (err) {}
 }
 
 async function dislikePost(req, res) {
   try {
+    const userId = checkForAuth(req.headers);
+
     const postId = req.query.postId;
-    const userId = req.query.userId;
     const post = await likesDAL.getLike({
-      where: { postId: parseInt(postId), userId: parseInt(userId) },
+      where: { postId: parseInt(postId), userId: userId },
     });
     await likesDAL.deleteLike({
       where: {
         id: post.id,
       },
     });
-    const posts = await likesDAL.findAll({
+
+    const posts = await postsDAL.findAll({
+      orderBy: {
+        createdAt: "desc",
+      },
       include: {
         user: true,
         likes: {
@@ -53,6 +83,7 @@ async function dislikePost(req, res) {
         },
       },
     });
+
     res.status(201).send(posts);
   } catch (err) {}
 }

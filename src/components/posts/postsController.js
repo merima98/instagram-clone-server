@@ -1,15 +1,35 @@
 import postsDAL from "./postsDAL.js";
 import usersDAL from "../users/usersDAL.js";
+import utils from "../../utils/index.js";
+
+function checkForAuth(headers) {
+  try {
+    const token = headers.authorization;
+
+    if (!token) {
+      return null;
+    }
+
+    const decoded = utils.jwt.verify(token);
+    const userId = decoded.id;
+
+    return userId;
+  } catch {
+    return null;
+  }
+}
 
 async function addPost(req, res) {
   try {
+    const userId = checkForAuth(req.headers);
+
     const values = req.body;
     const args = {
       data: {
         description: values.description,
         url: values.url,
         user: {
-          connect: { id: values.userId },
+          connect: { id: userId },
         },
       },
     };
@@ -35,8 +55,8 @@ async function getPosts(req, res) {
   try {
     const posts = await postsDAL.findAll({
       orderBy: {
-        createdAt: "desc", 
-      }, 
+        createdAt: "desc",
+      },
       include: {
         user: true,
         likes: {

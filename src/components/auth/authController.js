@@ -35,9 +35,11 @@ async function signup(req, res) {
         username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
+        image: user.image,
       },
       token,
     };
+
     res.status(201).send(response);
   } catch (err) {}
 }
@@ -46,6 +48,7 @@ async function signin(req, res) {
   const user = await usersDAL.findOne({
     where: { username: req.body.username },
   });
+
   if (user === null) {
     return res.status(400).send({ exception: "UserNotFound" });
   }
@@ -64,6 +67,7 @@ async function signin(req, res) {
         username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
+        image: user.image,
       },
       token,
     };
@@ -74,5 +78,5 @@ async function signin(req, res) {
 
 export default {
   signup,
-  signin, 
+  signin,
 };
