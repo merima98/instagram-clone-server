@@ -1,28 +1,9 @@
 import postsDAL from "./postsDAL.js";
 import usersDAL from "../users/usersDAL.js";
-import utils from "../../utils/index.js";
-
-function checkForAuth(headers) {
-  try {
-    const token = headers.authorization;
-
-    if (!token) {
-      return null;
-    }
-
-    const decoded = utils.jwt.verify(token);
-    const userId = decoded.id;
-
-    return userId;
-  } catch {
-    return null;
-  }
-}
 
 async function addPost(req, res) {
   try {
-    const userId = checkForAuth(req.headers);
-
+    const userId = res.locals.userId;
     const values = req.body;
     const args = {
       data: {

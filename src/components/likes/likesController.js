@@ -1,27 +1,9 @@
 import likesDAL from "./likesDAL.js";
 import postsDAL from "../posts/postsDAL.js";
-import utils from "../../utils/index.js";
-
-function checkForAuth(headers) {
-  try {
-    const token = headers.authorization;
-
-    if (!token) {
-      return null;
-    }
-
-    const decoded = utils.jwt.verify(token);
-    const userId = decoded.id;
-
-    return userId;
-  } catch {
-    return null;
-  }
-}
 
 async function likePost(req, res) {
   try {
-    const userId = checkForAuth(req.headers);
+    const userId = res.locals.userId;
 
     const postId = req.query.postId;
     const args = {
@@ -57,7 +39,7 @@ async function likePost(req, res) {
 
 async function dislikePost(req, res) {
   try {
-    const userId = checkForAuth(req.headers);
+    const userId = res.locals.userId;
 
     const postId = req.query.postId;
     const post = await likesDAL.getLike({
