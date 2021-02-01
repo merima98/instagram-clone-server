@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.post("/post", middlewares, postsController.addPost);
 router.get("/post", postsController.getPosts);
+router.get("/randomPosts", postsController.getRandomPosts);
 router.get("/userspost", postsController.findPostsByUser);
 
 export default router;

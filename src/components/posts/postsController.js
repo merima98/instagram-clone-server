@@ -77,9 +77,41 @@ async function findPostsByUser(req, res) {
     return res.status(200).send(posts);
   } catch (err) {}
 }
+function shuffle(array) {
+  const result = [];
+  const source = array.concat([]);
 
+  while (source.length) {
+    let index = Math.floor(Math.random() * source.length);
+    result.push(source.splice(index, 1)[0]);
+  }
+
+  return result;
+}
+
+async function getRandomPosts(req, res) {
+  try {
+    const posts = await postsDAL.findAll({
+      include: {
+        user: true,
+        likes: {
+          include: {
+            user: true,
+            post: true,
+          },
+        },
+      },
+    });
+
+    if (posts === null) {
+      return res.status(400).send({ exception: "PostsNotFound" });
+    }
+    return res.status(200).send(shuffle(posts));
+  } catch (err) {}
+}
 export default {
   addPost,
   getPosts,
   findPostsByUser,
+  getRandomPosts,
 };
