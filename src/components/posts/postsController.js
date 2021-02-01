@@ -102,7 +102,6 @@ async function getRandomPosts(req, res) {
         },
       },
     });
-
     if (posts === null) {
       return res.status(400).send({ exception: "PostsNotFound" });
     }
