@@ -30,7 +30,6 @@ async function signup(req, res) {
     const token = utils.jwt.sign(payload);
     const response = {
       user: {
-        id: user.id,
         email: user.email,
         username: user.username,
         firstName: user.firstName,
@@ -62,7 +61,6 @@ async function signin(req, res) {
     const token = utils.jwt.sign(payload);
     const response = {
       user: {
-        id: user.id,
         email: user.email,
         username: user.username,
         firstName: user.firstName,
