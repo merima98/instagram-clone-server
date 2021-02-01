@@ -77,6 +77,7 @@ async function findPostsByUser(req, res) {
     return res.status(200).send(posts);
   } catch (err) {}
 }
+
 function shuffle(array) {
   const result = [];
   const source = array.concat([]);
@@ -85,7 +86,6 @@ function shuffle(array) {
     let index = Math.floor(Math.random() * source.length);
     result.push(source.splice(index, 1)[0]);
   }
-
   return result;
 }
 
