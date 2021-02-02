@@ -6,8 +6,8 @@ import middlewares from "../../middlewares/requireAuthentication.js";
 const router = express.Router();
 
 router.post("/post", middlewares, postsController.addPost);
-router.get("/post", postsController.getPosts);
-router.get("/randomPosts", postsController.getRandomPosts);
-router.get("/userspost", postsController.findPostsByUser);
+router.get("/post", middlewares, postsController.getPosts);
+router.get("/randomPosts", middlewares, postsController.getRandomPosts);
+router.get("/userspost", middlewares, postsController.findPostsByUser);
 
 export default router;

@@ -24,8 +24,7 @@ async function signup(req, res) {
     const user = await usersDAL.create({
       data: { ...req.body, password: hash },
     });
-
-    const payload = { id: user._id };
+    const payload = { id: user.id };
 
     const token = utils.jwt.sign(payload);
     const response = {
