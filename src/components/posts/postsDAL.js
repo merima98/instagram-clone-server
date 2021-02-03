@@ -15,8 +15,14 @@ async function findOne(options) {
   const item = await prisma.post.findFirst(options);
   return item;
 }
+
+async function deleteOne(options) {
+  const item = await prisma.post.delete(options);
+  return item;
+}
 export default {
   create,
   findAll,
   findOne,
+  deleteOne,
 };

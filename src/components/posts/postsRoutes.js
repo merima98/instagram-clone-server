@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.post("/post", middlewares, postsController.addPost);
 router.get("/post", middlewares, postsController.getPosts);
+router.get("/getPostById", postsController.getPostById);
+router.delete("/delete", postsController.deletePost);
 router.get("/randomPosts", middlewares, postsController.getRandomPosts);
 router.get("/userspost", middlewares, postsController.findPostsByUser);
 

@@ -69,6 +69,15 @@ async function findPostsByUser(req, res) {
         createdAt: "desc",
       },
       where: { user: user },
+      include: {
+        user: true,
+        likes: {
+          include: {
+            user: true,
+            post: true,
+          },
+        },
+      },
     });
 
     if (posts === null) {
@@ -108,9 +117,66 @@ async function getRandomPosts(req, res) {
     return res.status(200).send(shuffle(posts));
   } catch (err) {}
 }
+
+async function getPostById(req, res) {
+  try {
+    const postId = req.query.postId;
+    const post = await postsDAL.findOne({
+      where: { id: parseInt(postId) },
+      include: {
+        user: true,
+        likes: {
+          include: {
+            user: true,
+            post: true,
+          },
+        },
+      },
+    });
+    if (post === null) {
+      return res.status(400).send({ exception: "PostsNotFound" });
+    }
+    return res.status(200).send(post);
+  } catch (err) {}
+}
+
+async function deletePost(req, res) {
+  try {
+    const postId = req.query.postId;
+    const post = await postsDAL.deleteOne({
+      where: { id: parseInt(postId) },
+    });
+
+    const user = await usersDAL.findOne({
+      where: { id: post.userId },
+    });
+
+    const posts = await postsDAL.findAll({
+      orderBy: {
+        createdAt: "desc",
+      },
+      where: { user: user },
+      include: {
+        user: true,
+        likes: {
+          include: {
+            user: true,
+            post: true,
+          },
+        },
+      },
+    });
+    if (post === null) {
+      return res.status(400).send({ exception: "PostsNotFound" });
+    }
+    return res.status(200).send(posts);
+  } catch (err) {}
+}
 export default {
   addPost,
   getPosts,
   findPostsByUser,
   getRandomPosts,
+  getPostById,
+  deletePost,
 };

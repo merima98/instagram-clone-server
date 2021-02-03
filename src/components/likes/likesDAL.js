@@ -6,6 +6,10 @@ async function findAll(values) {
   const posts = await prisma.post.findMany(values);
   return posts;
 }
+async function deleteMany(values) {
+  const likes = await prisma.likes.deleteMany(values);
+  return likes;
+}
 async function likePost(values) {
   const likedPost = await prisma.likes.create(values);
   return likedPost;
@@ -24,4 +28,5 @@ export default {
   likePost,
   getLike,
   deleteLike,
+  deleteMany,
 };

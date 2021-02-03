@@ -70,7 +70,19 @@ async function dislikePost(req, res) {
   } catch (err) {}
 }
 
+async function deleteManyLikes(req, res) {
+  try {
+    const postId = req.query.postId;
+    const likes = await likesDAL.deleteMany({
+      where: {
+        postId: parseInt(postId),
+      },
+    });
+    res.status(201).send(likes);
+  } catch (err) {}
+}
 export default {
   likePost,
   dislikePost,
+  deleteManyLikes,
 };
