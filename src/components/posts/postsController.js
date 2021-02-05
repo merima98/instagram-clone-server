@@ -87,15 +87,22 @@ async function findPostsByUser(req, res) {
   } catch (err) {}
 }
 
-function shuffle(array) {
-  const result = [];
-  const source = array.concat([]);
+// function shuffle(array) {
+//   const result = [];
+//   const source = array.concat([]);
 
-  while (source.length) {
-    let index = Math.floor(Math.random() * source.length);
-    result.push(source.splice(index, 1)[0]);
-  }
-  return result;
+//   while (source.length) {
+//     let index = Math.floor(Math.random() * source.length);
+//     result.push(source.splice(index, 1)[0]);
+//   }
+//   return result;
+// }
+
+function shuffle(arr) {
+  return arr
+    .map((a) => [Math.random(), a])
+    .sort((a, b) => a[0] - b[0])
+    .map((a) => a[1]);
 }
 
 async function getRandomPosts(req, res) {
@@ -115,6 +122,7 @@ async function getRandomPosts(req, res) {
       return res.status(400).send({ exception: "PostsNotFound" });
     }
     return res.status(200).send(shuffle(posts));
+    // return res.status(200).send(posts);
   } catch (err) {}
 }
 

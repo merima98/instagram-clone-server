@@ -20,9 +20,16 @@ async function deleteOne(options) {
   const item = await prisma.post.delete(options);
   return item;
 }
+
+async function updatePost(options) {
+  console.log("Options, ", options);
+  const item = await prisma.post.update(options);
+  return item;
+}
 export default {
   create,
   findAll,
   findOne,
   deleteOne,
+  updatePost,
 };

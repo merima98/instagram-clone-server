@@ -1,10 +1,8 @@
 import likesDAL from "./likesDAL.js";
-import postsDAL from "../posts/postsDAL.js";
 
 async function likePost(req, res) {
   try {
     const userId = res.locals.userId;
-
     const postId = req.query.postId;
     const args = {
       data: {
@@ -16,24 +14,8 @@ async function likePost(req, res) {
         },
       },
     };
-    await likesDAL.likePost(args);
-
-    const posts = await postsDAL.findAll({
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        user: true,
-        likes: {
-          include: {
-            user: true,
-            post: true,
-          },
-        },
-      },
-    });
-
-    res.status(201).send(posts);
+    const liked = await likesDAL.likePost(args);
+    res.status(200).send({ postId, likes: liked });
   } catch (err) {}
 }
 
@@ -50,23 +32,7 @@ async function dislikePost(req, res) {
         id: post.id,
       },
     });
-
-    const posts = await postsDAL.findAll({
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        user: true,
-        likes: {
-          include: {
-            user: true,
-            post: true,
-          },
-        },
-      },
-    });
-
-    res.status(201).send(posts);
+    res.status(200).send({ postId });
   } catch (err) {}
 }
 
