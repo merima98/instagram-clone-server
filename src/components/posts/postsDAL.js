@@ -22,7 +22,6 @@ async function deleteOne(options) {
 }
 
 async function updatePost(options) {
-  console.log("Options, ", options);
   const item = await prisma.post.update(options);
   return item;
 }
