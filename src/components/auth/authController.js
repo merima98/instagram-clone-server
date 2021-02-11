@@ -1,5 +1,26 @@
+import dotenv from "dotenv";
+import sgMail from "@sendgrid/mail";
+import twilio from "twilio";
+
 import usersDAL from "../users/usersDAL.js";
 import utils from "../../utils/index.js";
+
+dotenv.config();
+
+const {
+  SENDGRID_API_KEY,
+  SENDER_EMAIL,
+  ACCOUNT_SID,
+  AUTH_TOKEN,
+  PHONE_TO,
+  PHONE_FROM,
+} = process.env;
+
+const accountSid = ACCOUNT_SID;
+const authToken = AUTH_TOKEN;
+const client = new twilio(accountSid, authToken);
+
+sgMail.setApiKey(SENDGRID_API_KEY);
 
 async function signup(req, res) {
   try {
@@ -37,7 +58,16 @@ async function signup(req, res) {
       },
       token,
     };
-
+    const message = {
+      to: user.email,
+      from: SENDER_EMAIL,
+      subject: "Successfully created account!",
+      html:
+        "<strong>Great job! Enjoy using WORLDGRAM application, and enjoy posting amazing photos!</strong>",
+    };
+    try {
+      await sgMail.send(message);
+    } catch (error) {}
     res.status(201).send(response);
   } catch (err) {}
 }
@@ -68,6 +98,14 @@ async function signin(req, res) {
       },
       token,
     };
+
+    try {
+      client.messages.create({
+        body: `You (${user.username}) logged to WORLDGRAM application!`,
+        to: PHONE_TO,
+        from: PHONE_FROM,
+      });
+    } catch (error) {}
     return res.status(200).send(response);
   }
   return res.status(401).send({ exception: "NotAuthotizedException" });
