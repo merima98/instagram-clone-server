@@ -36,6 +36,19 @@ async function dislikePost(req, res) {
   } catch (err) {}
 }
 
+async function likesOfPostByUser(req, res) {
+  try {
+    const userId = res.locals.userId;
+    const postId = req.query.postId;
+
+    const like = await likesDAL.getLike({
+      where: { postId: parseInt(postId), userId: parseInt(userId) },
+    });
+
+    res.status(200).send({ like });
+  } catch (err) {}
+}
+
 async function deleteManyLikes(req, res) {
   try {
     const postId = req.query.postId;
@@ -51,4 +64,5 @@ export default {
   likePost,
   dislikePost,
   deleteManyLikes,
+  likesOfPostByUser,
 };
