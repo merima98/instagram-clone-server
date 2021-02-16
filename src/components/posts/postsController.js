@@ -1,5 +1,41 @@
+import aws from "aws-sdk";
+import request from "request";
+import dotenv from "dotenv";
+
 import postsDAL from "./postsDAL.js";
 import usersDAL from "../users/usersDAL.js";
+
+dotenv.config();
+const { AWS_SECRET_ACCESS, AWS_ACCESS_KEY } = process.env;
+
+aws.config.update({
+  secretAccessKey: AWS_SECRET_ACCESS,
+  accessKeyId: AWS_ACCESS_KEY,
+  region: "us-east-1",
+});
+const s3 = new aws.S3();
+
+function putFromUrl(url, bucket, key, callback) {
+  request(
+    {
+      url: url,
+      encoding: null,
+    },
+    function (err, res, body) {
+      if (err) {
+        return callback(err, res);
+      }
+      s3.putObject(
+        {
+          Bucket: bucket,
+          Key: key,
+          Body: body,
+        },
+        callback
+      );
+    }
+  );
+}
 
 async function addPost(req, res) {
   try {
@@ -15,6 +51,12 @@ async function addPost(req, res) {
       },
     };
     const post = await postsDAL.create(args);
+
+    putFromUrl(args.data.url, "worldgram", args.data.url, function (err, res) {
+      if (err) {
+        throw err;
+      }
+    });
 
     const createdPost = await postsDAL.findOne({
       where: { id: post.id },
