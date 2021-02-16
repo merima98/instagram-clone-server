@@ -14,25 +14,21 @@ async function likePost(req, res) {
         },
       },
     };
-    const liked = await likesDAL.likePost(args);
-    res.status(200).send({ postId, likes: liked });
-  } catch (err) {}
-}
-
-async function dislikePost(req, res) {
-  try {
-    const userId = res.locals.userId;
-
-    const postId = req.query.postId;
-    const post = await likesDAL.getLike({
-      where: { postId: parseInt(postId), userId: userId },
+    const like = await likesDAL.getLike({
+      where: { postId: parseInt(postId), userId: parseInt(userId) },
     });
-    await likesDAL.deleteLike({
-      where: {
-        id: post.id,
-      },
-    });
-    res.status(200).send({ postId });
+    if (!like) {
+      const liked = await likesDAL.likePost(args);
+      res.status(200).send({ postId, likes: liked });
+    }
+    if (like) {
+      await likesDAL.deleteLike({
+        where: {
+          id: like.id,
+        },
+      });
+      res.status(200).send({ postId });
+    }
   } catch (err) {}
 }
 
@@ -44,7 +40,6 @@ async function likesOfPostByUser(req, res) {
     const like = await likesDAL.getLike({
       where: { postId: parseInt(postId), userId: parseInt(userId) },
     });
-
     res.status(200).send({ like });
   } catch (err) {}
 }
@@ -62,7 +57,6 @@ async function deleteManyLikes(req, res) {
 }
 export default {
   likePost,
-  dislikePost,
   deleteManyLikes,
   likesOfPostByUser,
 };

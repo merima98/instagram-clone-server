@@ -14,6 +14,7 @@ const {
   AUTH_TOKEN,
   PHONE_TO,
   PHONE_FROM,
+  LOGIN_ENABLED,
 } = process.env;
 
 const accountSid = ACCOUNT_SID;
@@ -98,14 +99,15 @@ async function signin(req, res) {
       },
       token,
     };
-
-    try {
-      client.messages.create({
-        body: `You (${user.username}) logged to WORLDGRAM application!`,
-        to: PHONE_TO,
-        from: PHONE_FROM,
-      });
-    } catch (error) {}
+    if (LOGIN_ENABLED === "true") {
+      try {
+        client.messages.create({
+          body: `You (${user.username}) logged to WORLDGRAM application!`,
+          to: PHONE_TO,
+          from: PHONE_FROM,
+        });
+      } catch (error) {}
+    }
     return res.status(200).send(response);
   }
   return res.status(401).send({ exception: "NotAuthotizedException" });
