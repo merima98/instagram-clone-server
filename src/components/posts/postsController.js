@@ -6,7 +6,7 @@ import postsDAL from "./postsDAL.js";
 import usersDAL from "../users/usersDAL.js";
 
 dotenv.config();
-const { AWS_SECRET_ACCESS, AWS_ACCESS_KEY } = process.env;
+const { AWS_SECRET_ACCESS, AWS_ACCESS_KEY, S3_ENABLED } = process.env;
 
 aws.config.update({
   secretAccessKey: AWS_SECRET_ACCESS,
@@ -52,12 +52,18 @@ async function addPost(req, res) {
     };
     const post = await postsDAL.create(args);
 
-    putFromUrl(args.data.url, "worldgram", args.data.url, function (err, res) {
-      if (err) {
-        throw err;
-      }
-    });
-
+    if (S3_ENABLED === "true") {
+      putFromUrl(
+        args.data.url,
+        "worldgram",
+        args.data.url,
+        function (err, res) {
+          if (err) {
+            throw err;
+          }
+        }
+      );
+    }
     const createdPost = await postsDAL.findOne({
       where: { id: post.id },
       include: {
